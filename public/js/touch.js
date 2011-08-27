@@ -37,7 +37,7 @@ $(function() {
 		window.localStorage = {};
 	}
 	if(!localStorage.card) {
-		$.getJson("http://y-ddraig-goch.net/m/db.json", {}, function(data) {
+		$.getJSON("http://y-ddraig-goch.net/m/db.json", {}, function(data) {
 			$.extend(localStorage, data);
 			switchCard(0);
 		});

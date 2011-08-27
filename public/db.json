@@ -9,27 +9,27 @@
 		"woe": {
 			"23": {
 				"name": "Blight Bringers",
-				"image": "blight_bringers.jpg",
+				"image": "blight_bringers.jpg"
 			},
 			"24": {
 				"name": "Command of Undeath",
-				"image": "command_of_undeath.jpg",
+				"image": "command_of_undeath.jpg"
 			},
 			"25": {
 				"name": "Death Strike",
-				"image": "death_strike.jpg",
+				"image": "death_strike.jpg"
 			},
 			"26": {
 				"name": "Frozen Blight",
-				"image": "frozen_blight.jpg",
+				"image": "frozen_blight.jpg"
 			},
 			"27": {
 				"name": "Gargoyle",
-				"image": "gargoyle.jpg",
+				"image": "gargoyle.jpg"
 			},
 			"28": {
 				"name": "Horn of Winter",
-				"image": "Horn_of_winter.jpg",
+				"image": "Horn_of_winter.jpg"
 			}
 		}
 	}
