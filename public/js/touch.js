@@ -9,7 +9,7 @@ $(function() {
 					s=d[np][0];
 					n=d[np][1];
 					t=$(document.createElement("img"));
-					t.attr("src", "/images/"+s+"/"+internalStorage.card[s][n].image);
+					t.attr("src", "/images/"+s+"/"+localStorage.card[s][n].image);
 					t.attr("id", "card-"+s+"-"+n);
 					t.addClass("card");
 					if(np>p) {
@@ -32,10 +32,13 @@ $(function() {
 		}
 	;
 	
-	// initialise db
-	if(!internalStorage.card) {
+	// initialise db (emulate if not found)
+	if(!window.localStorage) {
+		window.localStorage = {};
+	}
+	if(!localStorage.card) {
 		$.getJson("http://y-ddraig-goch.net/m/db.json", {}, function(data) {
-			$.extend(internalStorage, data);
+			$.extend(localStorage, data);
 			switchCard(0);
 		});
 	}
