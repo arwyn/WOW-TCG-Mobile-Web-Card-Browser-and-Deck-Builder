@@ -37,15 +37,15 @@ $(function() {
 	if(!window.localStorage) {
 		window.localStorage = {};
 	}
-	if(!localStorage.card) {
+	//if(!localStorage.card) {
 		$.getJSON("http://y-ddraig-goch.net/m/db.json", {}, function(data) {
 			$.extend(localStorage, data);
 			switchCard(0);
 		});
-	}
-	else {
-		switchCard(0);
-	}
+	//}
+	//else {
+	//	switchCard(0);
+	//}
 	
 
 	$("body").bind("swipeleft", function(e) {
