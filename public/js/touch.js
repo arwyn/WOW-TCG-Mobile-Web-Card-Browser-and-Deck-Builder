@@ -11,6 +11,7 @@ $(function() {
 					t=$(document.createElement("img"));
 					t.attr("src", "/images/"+s+"/"+localStorage.card[s][n].image);
 					t.attr("id", "card-"+s+"-"+n);
+					alert("adding: "+s+"-"+n);
 					t.addClass("card");
 					if(np>p) {
 						c.append(t);
