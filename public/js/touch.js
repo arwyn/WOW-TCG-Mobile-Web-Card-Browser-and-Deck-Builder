@@ -12,6 +12,9 @@ $(function() {
 				if(np >= 0 && np < d.length) { 
 					s=d[np][0];
 					n=d[np][1];
+					if($("#"+getCardId(d[np])).length) {
+						continue;
+					}
 					t=$(document.createElement("img"));
 					t.attr("src", "images/"+s+"/"+db.card[s][n].image);
 					t.attr("id", "card-"+s+"-"+n);
