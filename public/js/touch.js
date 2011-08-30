@@ -3,6 +3,9 @@ $(function() {
 		c = $(".cards"),
 		d = [["woe",23],["woe",24],["woe",25],["woe",26],["woe",27],["woe",28]],
 		p = 0,
+		getCardId = function(c) {
+			return "card-" + c[0] + "-" + c[1];
+		},
 		loadCards = function(p) {
 			var np, t, s, n;
 			for(np=p-2;np<p+2;np++) {
@@ -12,7 +15,6 @@ $(function() {
 					t=$(document.createElement("img"));
 					t.attr("src", "/images/"+s+"/"+db.card[s][n].image);
 					t.attr("id", "card-"+s+"-"+n);
-					alert("adding: "+s+"-"+n);
 					t.addClass("card");
 					if(np>p) {
 						c.append(t);
@@ -27,9 +29,10 @@ $(function() {
 			var np = p+dir;
 			if(np >= 0 && np < d.length) {
 				loadCards(np);
-				$("img#card-"+d[p][0]+d[p][1]).hide();
+				console.info(p);
+				$("img#"+getCardId(d[p])).hide();
 				p=np;
-				$("img#card-"+d[p][0]+d[p][1]).show();
+				$("img#"+getCardId(d[p])).show();
 			}
 		},
 		loadDb = function(callback) {
@@ -38,14 +41,14 @@ $(function() {
 			$.getJSON(window.location.href + "db.json", {}, function(data) {
 				db = data;
 				callback();
-			}
+			});
 		}
 	;
 	
 	loadDb(function() {
-		$(".cards .loading").hide();
+		$(".viewport .loading").hide();
 		switchCard(0);
-	}
+	});
 
 	$("body").bind("swipeleft", function(e) {
 		switchCard(1);
