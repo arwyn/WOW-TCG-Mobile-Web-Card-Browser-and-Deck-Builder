@@ -13,7 +13,7 @@ $(function() {
 					s=d[np][0];
 					n=d[np][1];
 					t=$(document.createElement("img"));
-					t.attr("src", "/images/"+s+"/"+db.card[s][n].image);
+					t.attr("src", "images/"+s+"/"+db.card[s][n].image);
 					t.attr("id", "card-"+s+"-"+n);
 					t.addClass("card");
 					if(np>p) {
