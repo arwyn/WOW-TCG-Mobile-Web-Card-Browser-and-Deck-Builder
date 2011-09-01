@@ -12,7 +12,6 @@ $(function() {
 					t=$(document.createElement("img"));
 					t.attr("src", "/images/"+s+"/"+db.card[s][n].image);
 					t.attr("id", "card-"+s+"-"+n);
-					alert("adding: "+s+"-"+n);
 					t.addClass("card");
 					if(np>p) {
 						c.append(t);
@@ -38,14 +37,14 @@ $(function() {
 			$.getJSON(window.location.href + "db.json", {}, function(data) {
 				db = data;
 				callback();
-			}
+			});
 		}
 	;
 	
 	loadDb(function() {
 		$(".cards .loading").hide();
 		switchCard(0);
-	}
+	});
 
 	$("body").bind("swipeleft", function(e) {
 		switchCard(1);
