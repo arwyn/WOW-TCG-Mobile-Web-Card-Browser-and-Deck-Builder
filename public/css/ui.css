@@ -1,0 +1,9 @@
+body {background:#000; padding:0px; margin: 0px;}
+.ui { background: #22f; margin: 0px; padding-left: 0.5em; border: #000 solid .1em; border-radius: 1.5em 0px 0px 1.5em/ 1em 0px 0px 1em;} 
+.ui > ul { margin: 0em 0px 0px 3em; padding: 0px; height: 1.5em;}
+.ui > ul li { background: #22f; color:#000; border-right: #000 solid 0.5em; border-left:none; padding: 0.25em; display: inline-block; height: 1em;}
+.ui > ul li:first-child { border-left: #000 solid 0.5em;}
+.ui > ul li:hover { background: #0b0; }
+.ui > div { border: #000 solid 0.3em; background: #000; color: #aaa; margin-bottom: 0.2em; border-radius: 1em 0px 0px 1em / 1em 0px 0px 1em;}
+/*.ui > ul + div { border-top: none; margin-top: 0px; border-radius: 0px 0px 0px 1.5em/ 0px 0px 0px 1em;}*/
+
