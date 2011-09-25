@@ -80,7 +80,7 @@ $(function() {
 			return;
 		}
 		
-		ul.html("");
+		ul.empty();
 		$.each(cards, function(i, v) {
 			var li=$(document.createElement("li")),
 				a=$(document.createElement("a"))
