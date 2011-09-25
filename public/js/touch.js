@@ -99,7 +99,6 @@ $(function() {
 	});
 	
 	$("#card").bind("pagebeforeshow", function() {
-	alert("hit");
 		if(!db.index) {
 			$.mobile.changePage("#dbloader");
 			return
@@ -145,7 +144,7 @@ $(function() {
 			}
 		;
 		
-		if(!cards || p == undefined) {
+		if(!cards || pos == undefined) {
 			$.mobile.changePage("#home");
 			return;
 		}
@@ -157,7 +156,7 @@ $(function() {
 			switchCard(-1);
 		});
 
-		loadCards(p);
+		loadCards(pos);
 		switchCard(0);
 	});
 //	loadDb(function() {
