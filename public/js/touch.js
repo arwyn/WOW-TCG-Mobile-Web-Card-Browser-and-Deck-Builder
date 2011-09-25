@@ -89,8 +89,8 @@ $(function() {
 			a.attr("href","#card");
 			a.text(db.card[v[0]][v[1]]["name"]);
 			a.bind("click", function() {
-				alert("hit");
 				$("#card").jqmData("cards", cards).jqmData("card", i);
+				return true;
 			});
 			li.append(a);
 			ul.append(li)
@@ -99,6 +99,7 @@ $(function() {
 	});
 	
 	$("#card").bind("pagebeforeshow", function() {
+	alert("hit");
 		if(!db.index) {
 			$.mobile.changePage("#dbloader");
 			return
