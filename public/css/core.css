@@ -1,2 +1,3 @@
-body {background: #000; color: #999;}
-.cards img {display:none; width:100%;}
+.cards .card {display:none; width:100%;}
+.cards .card.active {display:block; border-radius: 2.5em; border:solid thin #777; border-shadow: .5em .5em .1em #000}
+

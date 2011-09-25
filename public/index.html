@@ -2,16 +2,62 @@
 <html>
 <head><title>test page</title>
 <meta name="viewport" content="width=device-width; height=device-height; maximum-scale=1.0; initial-scale=1.0; user-scalable=no"/>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />
+<!--<link rel="stylesheet" href="css/ui.css" />-->
 <link rel="stylesheet" href="css/core.css" />
 <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
 <script type="application/javascript" src="js/touch.js"></script>
 <script src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>
 </head>
 <body>
-<h1>Card gallery</h1>
-<div class="viewport">
-	<p class="loading">Loading</p>
-	<div class="cards">
+<div data-role="page" id="home">
+	<div data-role="header" data-position="inline">
+		<h1>Home</h1>
+	</div>
+	<div data-role="content">
+		<a data-role="button" data-icon="search" href="index.html#search">Search</a>
+		<a data-role="button" data-icon="star" href="index.html#decks">Decks</a>
+	</div>
+</div>
+<div data-role="page" id="card">
+	<div data-role="header" data-position="inline">
+		<a data-icon="back" href="#list">List</a>
+		<h1>Card View</h1>
+		<a data-icon="gear">Options</a>
+	</div>
+	<div data-role="content">
+		<div class="cards"></div>
+		<div class="details"></div>
+		<div class="deckinfo"></div>
+	</div>
+</div>
+<div data-role="page" id="list">
+	<div data-role="header" data-position="inline">
+		<a data-icon="back" href="#search">Search</a>
+		<h1>Card List</h1>
+		<a data-icon="gear">Options</a>
+	</div>
+	<div data-role="content">
+		<ul class="card-list" data-role="listview">
+		</ul>
+	</div>
+</div>
+<div data-role="page" id="search">
+	<div data-role="header" data-position="inline">
+		<a data-icon="back" href="#home">Home</a>
+		<h1>Search cards</h1>
+		<a data-icon="gear">Options</a>
+	</div>
+	<div data-role="content">
+
+	</div>
+</div>
+<div data-role="dialog" id="dbloader">
+	<div data-role="header" data-position="inline">
+		<h1>Loading DB</h1>
+	</div>
+	<div data-role="content">
+	
 	</div>
 </div>
 </body>
