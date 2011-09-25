@@ -1,7 +1,7 @@
 $(function() {
 	var db = {},
 		loadDb = function(callback) {
-			var url = window.location.href.replace(/\/(?:[a-z]*?\.html)#.*$/, '') + "/db.json";
+			var url = window.location.href.replace(/\/(?:[a-z]*?\.html)?#.*$/, '') + "/db.json";
 
 			// for now load db file each time
 			// TODO: use localStorage object to cache results
