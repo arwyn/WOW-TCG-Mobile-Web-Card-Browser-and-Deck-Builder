@@ -1,12 +1,11 @@
 $(function() {
 	var db = {},
-		c = $(".cards"),
-		d = [["woe",23],["woe",24],["woe",25],["woe",26],["woe",27],["woe",28]],
-		p = 0,
 		loadDb = function(callback) {
+			var url = window.location.href.replace(/\/(?:[a-z]*?\.html)#.*$/, '') + "/db.json";
+
 			// for now load db file each time
 			// TODO: use localStorage object to cache results
-			$.getJSON(window.location.href.replace(/\/[a-z]*?\.html.*$/, '') + "/db.json", {}, function(data) {
+			$.getJSON(url, {}, function(data) {
 				db = data;
 				callback();
 			});
@@ -90,6 +89,7 @@ $(function() {
 			a.attr("href","#card");
 			a.text(db.card[v[0]][v[1]]["name"]);
 			a.bind("click", function() {
+				alert("hit");
 				$("#card").jqmData("cards", cards).jqmData("card", i);
 			});
 			li.append(a);
