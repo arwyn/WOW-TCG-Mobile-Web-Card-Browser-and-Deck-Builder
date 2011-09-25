@@ -52,7 +52,7 @@ $(function() {
 					;
 					a.text(v["name"]);
 					a.attr("href", "#list");
-					a.bind("click", function() { $("#list").jqmData("cards", v.cards); });
+					a.bind("click", function() { $("#list").jqmData("cards", v.cards); return true;});
 					li.append(a);
 					num.addClass("ui-li-count");
 					num.text(v.cards.length);
