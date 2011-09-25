@@ -13,29 +13,37 @@
 <div data-role="page" id="home">
 	<div data-role="header" data-position="inline">
 		<h1>Home</h1>
+		<a href="#options" data-icon="gear">Options</a>
 	</div>
 	<div data-role="content">
-		<a data-role="button" data-icon="search" href="index.html#search">Search</a>
+		<a data-role="button" data-icon="search" href="index.html#search">Cards</a>
 		<a data-role="button" data-icon="star" href="index.html#decks">Decks</a>
+	</div>
+</div>
+<div data-role="dialog" id="options">
+	<div data-role="header" data-position="inline">
+		<h1>Options</h1>
+	</div>
+	<div data-role="content">
+		<a href="#dbrefresh" data-role="button">Refresh DB</a>
 	</div>
 </div>
 <div data-role="page" id="card">
 	<div data-role="header" data-position="inline">
 		<a data-icon="back" href="#list">List</a>
 		<h1>Card View</h1>
-		<a data-icon="gear">Options</a>
 	</div>
 	<div data-role="content">
-		<div class="cards"></div>
-		<div class="details"></div>
-		<div class="deckinfo"></div>
+		<form><input type="range" min="0" max="0" value="0" class="card-number"/></form>
+		<div class="cards" data-role="collapsible"></div>
+		<div class="details" data-role="collapsible" data-collapsed="true"></div>
+		<div class="deckinfo" data-collapsed="true"></div>
 	</div>
 </div>
 <div data-role="page" id="list">
 	<div data-role="header" data-position="inline">
 		<a data-icon="back" href="#search">Search</a>
 		<h1>Card List</h1>
-		<a data-icon="gear">Options</a>
 	</div>
 	<div data-role="content">
 		<ul class="card-list" data-role="listview">
@@ -49,7 +57,7 @@
 		<a data-icon="gear">Options</a>
 	</div>
 	<div data-role="content">
-
+		<ul class="card-search" data-role="listview" data-inset="true"></ul>
 	</div>
 </div>
 <div data-role="dialog" id="dbloader">
@@ -57,7 +65,20 @@
 		<h1>Loading DB</h1>
 	</div>
 	<div data-role="content">
-	
+		<p>No DB Detected. Need to download DB files for this application to work. They are around ~300kb. Shall I proceed?</p>
+		<a data-role="button" href="#">Yes, please!</a>
+	</div>
+</div>
+<div data-role="dialog" id="dbrefresh">
+	<div data-role="header" data-position="inline">
+		<h1>Refresh DB</h1>
+	</div>
+	<div data-role="content">
+		<dl dat-role="listview" data-inset="true">
+			<dt>Current DB</dt>
+			<dd class="timestamp"></dd>
+		</dl>
+		<a data-role="button" href="#">Refresh</a>
 	</div>
 </div>
 </body>

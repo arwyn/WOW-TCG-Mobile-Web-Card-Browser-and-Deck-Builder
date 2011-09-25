@@ -1,78 +1,102 @@
 $(function() {
 	var db = {},
-		loadDb = function(callback) {
+		page = {},
+		refreshDb = function(callback) {
 			var url = window.location.href.replace(/\/(?:[a-z]*?\.html)?#.*$/, '') + "/db.json";
-
-			// for now load db file each time
-			// TODO: use localStorage object to cache results
+				
+			// download and store in localstorage
 			$.getJSON(url, {}, function(data) {
+				//TODO: generate index.
+				
+				data.timestamp = Date.now();
 				db = data;
+				localStorage.db = JSON.stringify(data);
+				
+				page.search.page.trigger("populate");
+				
 				callback();
 			});
+		},
+		checkDb = function() {
+			if(db.index) return true;
+			if(localStorage.db) {
+				db = JSON.parse(localStorage.db);
+				return true;
+			}
+			return false;
+		},
+		loadDb = function() {
+			return $.mobile.changePage(checkDb() ? "#dbrefresh" : "#dbloader");
 		}
 	;
 	
+	// build page object list
+	$("div[data-role='page'],div[data-role='dialog']").each(function() {
+		var self = $(this),
+			head = $("div[data-role='header']", self),
+			body = $("div[data-role='content']", self),
+			id = self.attr("id");
+		
+		page[id] = { page: self, head: head, body: body };
+	});
+	
 	// init page logic
 	// home page
-	$("#home").bind("pageshow", function() { if(!db.card) $.mobile.changePage("#dbloader"); });
-	$("#dbloader").bind("pageshow", function() {
-		var addContinue = function() {
-			var btn=$(document.createElement("a"));
-			btn.attr("href","#home");
-			btn.attr("data-role", "button");
-			btn.attr("data-icon", "check");
-			btn.text("Continue");
-			$("#dbloader div.ui-content").append(btn);
-			$("#dbloader").trigger("create");
-		}
-		if(!db.card) {loadDb(addContinue); }
-		else { addContinue(); }
+	page.home.page.bind("pagebeforeshow", function() { if(!checkDb()) return loadDb(); });
+	page.dbloader.page.bind("pagebeforeshow", function() {
+		$("a", page.dbloader.body).bind("click", function() {
+			$.mobile.showLoading(true);
+			refreshDb(function() { $mobile.showLoading(false); $.mobile.changePage("#home"); });
+		});
 	});
-	$("#search").bind("pagebeforeshow", function() {
-		if(!db.index) {
-			$.mobile.changePage("#dbloader");
-			return
-		}
+	page.dbrefresh.page.bind("pagebeforeshow", function() {
+		$("dd.timestamp", page.dbrefresh.body).text(new Date(db.timestamp).toLocaleString());
+		$("a", page.dbrefresh.body).bind("click", function() {
+			$.mobile.showPageLoadingMsg();
+			refreshDb(function() { $.mobile.hidePageLoadingMsg(); $.mobile.changePage("#home"); });
+		});
 		
-		var ul, li, uli;
-	
-		if(!$("#search div[data-role='content'] ul").length) {
-			ul = $(document.createElement("ul"));
-			ul.attr("data-role","listview");
-			ul.attr("data-inset","true");
-			if(db.index.type) {
-				li = $(document.createElement("li"));
-				li.text(db.index.type["name"]);
-				uli = $(document.createElement("ul"));
-				uli.attr("data-inset","true");
-				$.each(db.index.type.content, function(i,v) {
-					var li = $(document.createElement("li")),
-						num = $(document.createElement("span")),
-						a = $(document.createElement("a"))
-					;
-					a.text(v["name"]);
-					a.attr("href", "#list");
-					a.bind("click", function() { $("#list").jqmData("cards", v.cards); return true;});
-					li.append(a);
-					num.addClass("ui-li-count");
-					num.text(v.cards.length);
-					li.append(num);
-					uli.append(li);
-				});
-				li.append(uli);
-				ul.append(li);
-			}
-			$("#search div[data-role='content']").append(ul).trigger("create");
+	});
+	page.search.page.bind("pagebeforeshow", function() {
+		if(!checkDb()) return loadDb();
+		
+		$("ul.card-search", page.search.body).listview("refresh");
+	});
+	page.search.page.bind("populate", function() {
+		var li, uli, ul = $("ul.card-search", page.search.body);
+		
+		ul.empty();
+
+		if(db.index.type) {
+			li = $(document.createElement("li"));
+			li.text(db.index.type["name"]);
+			uli = $(document.createElement("ul"));
+			uli.attr("data-inset","true");
+			$.each(db.index.type.content, function(i,v) {
+				var li = $(document.createElement("li")),
+					num = $(document.createElement("span")),
+					a = $(document.createElement("a"))
+				;
+				a.text(v["name"]);
+				a.attr("href", "#list");
+				a.bind("click", function() { $("#list").jqmData("cards", v.cards); return true;});
+				li.append(a);
+				num.addClass("ui-li-count");
+				num.text(v.cards.length);
+				li.append(num);
+				uli.append(li);
+			});
+			li.append(uli);
+			ul.append(li);
 		}
 	});
-	
-	$("#list").bind("pagebeforeshow", function() {
-		if(!db.index) {
-			$.mobile.changePage("#dbloader");
-			return
-		}
 
-		var	cards = $("#list").jqmData("cards"),
+	
+	page.list.page.bind("pagebeforeshow", function() {
+		if(!checkDb()) return loadDb();
+
+		var	cards = page.list.page.jqmData("cards"),
+			prev = page.list.page.jqmData("prev-cards")
 			ul = $("#list ul.card-list");
 		
 		if(!cards) {
@@ -80,32 +104,39 @@ $(function() {
 			return;
 		}
 		
-		ul.empty();
-		$.each(cards, function(i, v) {
-			var li=$(document.createElement("li")),
-				a=$(document.createElement("a"))
-			;
+		if(prev != cards) {
+			ul.trigger("populate", [cards]);
+		}
+		page.list.page.jqmData("prev-cards",cards);
+	});
+	page.list.page.bind("pagecreate", function() {
+		var	ul = $("#list ul.card-list");
+	
+		ul.bind("populate", function(e, cards) {
+			ul.empty();
+			$.each(cards, function(i, v) {
+				var li=$(document.createElement("li")),
+					a=$(document.createElement("a"))
+				;
 			
-			a.attr("href","#card");
-			a.text(db.card[v[0]][v[1]]["name"]);
-			a.bind("click", function() {
-				$("#card").jqmData("cards", cards).jqmData("card", i);
-				return true;
+				a.attr("href","#card");
+				a.text(db.card[v[0]][v[1]]["name"]);
+				a.bind("click", function() {
+					$("#card").jqmData("cards", cards).jqmData("card", i);
+					return true;
+				});
+				li.append(a);
+				ul.append(li)
 			});
-			li.append(a);
-			ul.append(li)
+			ul.listview("refresh");
 		});
-		ul.listview("refresh");
 	});
 	
-	$("#card").bind("pagebeforeshow", function() {
-		if(!db.index) {
-			$.mobile.changePage("#dbloader");
-			return
-		}
+	page.card.page.bind("pagebeforeshow", function() {
+		if(!checkDb()) return loadDb();
 
-		var	cards = $("#card").jqmData("cards"),
-			pos = $("#card").jqmData("card"),
+		var	cards = page.card.page.jqmData("cards"),
+			pos = page.card.page.jqmData("card"),
 			view = $("#card div.cards"),
 			getCardId = function(card) {
 				return "card-" + card[0] + "-" + card[1];
@@ -124,7 +155,7 @@ $(function() {
 						tag.attr("src", "images/"+db.card[set][num].image);
 						tag.attr("id", id);
 						tag.addClass("card");
-						if(newpos>pos) {
+						if(newpos > pos) {
 							view.append(tag);
 						}
 						else {
@@ -137,9 +168,10 @@ $(function() {
 				var newpos = pos + dir;
 				if(newpos >= 0 && newpos < cards.length) {
 					loadCards(newpos);
-					$("img#"+getCardId(cards[pos])).removeClass("active");
-					pos=newpos;
+					$("img.card").removeClass("active");
+					pos = newpos;
 					$("img#"+getCardId(cards[pos])).addClass("active");
+					$(".card-number", page.card.body).val(pos).slider("refresh");
 				}
 			}
 		;
@@ -149,10 +181,12 @@ $(function() {
 			return;
 		}
 		
-		$("#card").bind("swipeleft", function(e) {
+		$(".card-number", page.card.body).attr("min","1").attr("max",54);
+		
+		page.card.page.bind("swipeleft", function(e) {
 			switchCard(1);
 		});
-		$("#card").bind("swiperight", function(e) {
+		page.card.page.bind("swiperight", function(e) {
 			switchCard(-1);
 		});
 
