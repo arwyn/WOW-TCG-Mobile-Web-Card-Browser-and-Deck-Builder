@@ -3,6 +3,7 @@
 import sys
 import json
 from csv import reader as csvr
+from string import maketrans
 
 # load cmnd line args
 lang = sys.argv[1]
@@ -65,7 +66,7 @@ for fn in files:
 			setname = entry['setname'].lower()
 			entry['setname'] = setname
 			entry['image'] = "{setname}/{name}.jpg".format(
-				name = entry['name'].lower().replace(' ','_').replace('\'','').replace('"',''),
+				name = entry['name'].lower().translate(maketrans(' -','__'), '\'",'),
 				setname = setname
 			)
 			entry['searchkey'] = entry['name'].replace('\'','').replace('"','');
