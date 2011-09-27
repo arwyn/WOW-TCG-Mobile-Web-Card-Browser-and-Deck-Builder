@@ -35,9 +35,18 @@
 	</div>
 	<div data-role="content">
 		<form><input type="range" min="0" max="0" value="0" class="card-number"/></form>
-		<div class="cards" data-role="collapsible"></div>
-		<div class="details" data-role="collapsible" data-collapsed="true"></div>
-		<div class="deckinfo" data-collapsed="true"></div>
+		<div class="card container">
+			<div class="card section" data-role="collapsible">
+				<h2>Card</h2>
+				<div class="cards"></div>
+			</div>
+			<div class="detail section" data-role="collapsible" data-collapsed="true">
+				<h2>Details</h2>
+			</div>
+			<div class="deckinfo section" data-role="collapsible" data-collapsed="true">
+				<h2>Deck Info</h2>
+			</div>
+		</div>
 	</div>
 </div>
 <div data-role="page" id="list">

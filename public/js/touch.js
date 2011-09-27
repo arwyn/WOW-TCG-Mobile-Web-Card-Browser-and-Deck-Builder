@@ -18,9 +18,10 @@ $(function() {
 			});
 		},
 		checkDb = function() {
-			if(db.index) return true;
-			if(localStorage.db) {
+			if(db.index) return true; // already loaded
+			if(localStorage.db) { // load from storage
 				db = JSON.parse(localStorage.db);
+				page.search.page.trigger("populate");
 				return true;
 			}
 			return false;
@@ -45,8 +46,8 @@ $(function() {
 	page.home.page.bind("pagebeforeshow", function() { if(!checkDb()) return loadDb(); });
 	page.dbloader.page.bind("pagebeforeshow", function() {
 		$("a", page.dbloader.body).bind("click", function() {
-			$.mobile.showLoading(true);
-			refreshDb(function() { $mobile.showLoading(false); $.mobile.changePage("#home"); });
+			$.mobile.showPageLoadingMsg();
+			refreshDb(function() { $.mobile.hidePageLoadingMsg(); $.mobile.changePage("#home"); });
 		});
 	});
 	page.dbrefresh.page.bind("pagebeforeshow", function() {
@@ -171,9 +172,11 @@ $(function() {
 					$("img.card").removeClass("active");
 					pos = newpos;
 					$("img#"+getCardId(cards[pos])).addClass("active");
-					$(".card-number", page.card.body).val(pos).slider("refresh");
+					$(".card-number", page.card.body).val(pos + 1 + "").slider("refresh");
 				}
-			}
+			},
+			range = $(".card-number", page.card.body),
+			container = $(".card.container", page.card.body)
 		;
 		
 		if(!cards || pos == undefined) {
@@ -181,27 +184,25 @@ $(function() {
 			return;
 		}
 		
-		$(".card-number", page.card.body).attr("min","1").attr("max",54);
-		
-		page.card.page.bind("swipeleft", function(e) {
-			switchCard(1);
+		range.attr("min","1").attr("max",cards.length+1+"");
+		(function(el, timeout) {
+			var timer, trig=function() { el.trigger("changed"); };
+			el.bind("change", function() {
+				if(timer) {
+					clearTimeout(timer);
+				}
+				timer = setTimeout(trig, timeout);
+			});
+		})(range, 500);
+		range.bind("changed", function() { 
+			if((pos+1)+"" != range.val()) { pos=parseInt(range.val())-1; loadCards(pos); switchCard(0); }
 		});
-		page.card.page.bind("swiperight", function(e) {
-			switchCard(-1);
+		
+		$(".card.container", page.card.page).bind("swipeleft swiperight", function(e) {
+			switchCard(e.type=="swipeleft" ? 1 : -1);
 		});
 
 		loadCards(pos);
 		switchCard(0);
 	});
-//	loadDb(function() {
-//		$(".viewport .loading").hide();
-//		switchCard(0);
-//	});
-
-//	$("body").bind("swipeleft", function(e) {
-//		switchCard(1);
-//	});
-//	$("body").bind("swiperight", function(e) {
-//		switchCard(-1);
-//	});
 });
